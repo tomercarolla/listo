@@ -1,4 +1,4 @@
-import { read } from "@core/crud";
+import { create, read } from "@core/crud";
 
 //TODO move to common file
 export type Todo = {
@@ -11,12 +11,6 @@ export type Todo = {
 type TodoRepositoryGetParams = {
   page?: number;
   limit?: number;
-};
-
-type TodoRepositoryGetOutput = {
-  todos: Todo[];
-  total: number;
-  pages: number;
 };
 
 function get({ page, limit }: TodoRepositoryGetParams = {}) {
@@ -36,6 +30,11 @@ function get({ page, limit }: TodoRepositoryGetParams = {}) {
   };
 }
 
+async function createByContent(content: string): Promise<Todo> {
+  return create(content);
+}
+
 export const todoRepository = {
   get,
+  createByContent,
 };

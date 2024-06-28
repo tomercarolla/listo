@@ -5,10 +5,12 @@ export type Todo = {
   date: Date;
   done: boolean;
 };
+
 type TodoRepositoryGetParams = {
   page: number;
   limit: number;
 };
+
 type TodoRepositoryGetOutput = {
   todos: Todo[];
   total: number;
