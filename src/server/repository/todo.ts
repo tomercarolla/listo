@@ -1,4 +1,4 @@
-import {read} from "@core/crud";
+import { read } from "@core/crud";
 
 //TODO move to common file
 export type Todo = {
@@ -6,18 +6,18 @@ export type Todo = {
   content: string;
   date: string;
   done: boolean;
-}
+};
 
 type TodoRepositoryGetParams = {
   page?: number;
   limit?: number;
-}
+};
 
 type TodoRepositoryGetOutput = {
   todos: Todo[];
   total: number;
   pages: number;
-}
+};
 
 function get({ page, limit }: TodoRepositoryGetParams = {}) {
   const currentPage = page || 1;
@@ -38,4 +38,4 @@ function get({ page, limit }: TodoRepositoryGetParams = {}) {
 
 export const todoRepository = {
   get,
-}
+};
