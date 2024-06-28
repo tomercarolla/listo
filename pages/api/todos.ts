@@ -1,6 +1,5 @@
-import {NextApiRequest, NextApiResponse} from "next";
-import {read} from "@core/crud";
-import {get} from "@server/controller/todo";
+import { NextApiRequest, NextApiResponse } from "next";
+import { get } from "@server/controller/todo";
 
 export default function handler(req: NextApiRequest, res: NextApiResponse) {
   if (req.method === "GET") {
@@ -8,6 +7,6 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
   }
 
   return res.status(405).json({
-    message: "Method not allowed"
-  })
+    message: "Method not allowed",
+  });
 }
