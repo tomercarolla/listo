@@ -17,6 +17,8 @@ export default function HomePage() {
 
   const hasNoTodos = filteredTodos.length === 0 && !isLoading;
   const hasMorePages = page < totalPage;
+  
+  
 
   useEffect(() => {
     if (!initialLoadComplete.current) {
