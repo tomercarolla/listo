@@ -1,16 +1,17 @@
 import { GlobalStyles } from "@ui/theme/GlobalStyles";
-import { useEffect, useRef, useState } from "react";
-import { filterTodosByContent, get } from "@ui/controller/todo";
-import { Todo } from "@ui/repository/todo";
+import { FormEvent, useEffect, useRef, useState } from "react";
+import { filterTodosByContent, get, create } from "@ui/controller/todo";
+import { ITodoSchema } from "@ui/schema/todo";
 
 const bg = "https://mariosouto.com/cursos/crudcomqualidade/bg";
 
 export default function HomePage() {
   const [page, setPage] = useState(1);
   const [totalPage, setTotalPages] = useState(0);
-  const [todos, setTodos] = useState<Todo[]>([]);
+  const [todos, setTodos] = useState<ITodoSchema[]>([]);
   const [search, setSearch] = useState("");
   const [isLoading, setIsLoading] = useState(true);
+  const [newTodo, setNewTodo] = useState("");
   const initialLoadComplete = useRef(false);
   const filteredTodos = filterTodosByContent(todos, search);
 
@@ -31,6 +32,21 @@ export default function HomePage() {
     }
   }, []);
 
+  const submit = async (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+
+    await create({
+      content: newTodo,
+      onSuccess(newTodo: ITodoSchema) {
+        setTodos((prev) => [newTodo, ...prev]);
+        setNewTodo("");
+      },
+      onError() {
+        alert("Error you need to fill the content");
+      },
+    });
+  };
+
   return (
     <main>
       <GlobalStyles themeName="indigo" />
@@ -43,8 +59,16 @@ export default function HomePage() {
         <div className="typewriter">
           <h1>O que fazer hoje?</h1>
         </div>
-        <form>
-          <input type="text" placeholder="Correr, Estudar..." />
+        <form onSubmit={submit}>
+          <input
+            type="text"
+            placeholder="Correr, Estudar..."
+            value={newTodo}
+            onChange={(event) => {
+              setNewTodo(event.target.value);
+            }}
+          />
+
           <button type="submit" aria-label="Adicionar novo item">
             +
           </button>

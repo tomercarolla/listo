@@ -1,10 +1,5 @@
-//TODO move to common file
-export type Todo = {
-  id: string;
-  content: string;
-  date: Date;
-  done: boolean;
-};
+import { ITodoSchema, TodoSchema } from "@ui/schema/todo";
+import { z } from "zod";
 
 type TodoRepositoryGetParams = {
   page: number;
@@ -12,7 +7,7 @@ type TodoRepositoryGetParams = {
 };
 
 type TodoRepositoryGetOutput = {
-  todos: Todo[];
+  todos: ITodoSchema[];
   total: number;
   pages: number;
 };
@@ -32,6 +27,34 @@ async function get({
   });
 }
 
+async function createByContent(content: string): Promise<ITodoSchema> {
+  const response = await fetch("/api/todos", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ content }),
+  });
+
+  if (!response.ok) {
+    throw new Error("Failed to create todo");
+  }
+
+  const ServerResponseSchema = z.object({
+    todo: TodoSchema,
+  });
+  const serverResponseParsed = ServerResponseSchema.safeParse(
+    await response.json()
+  );
+
+  if (!serverResponseParsed.success) {
+    throw new Error("Failed to create todo");
+  }
+
+  return serverResponseParsed.data.todo;
+}
+
 export const todoRepository = {
   get,
+  createByContent,
 };

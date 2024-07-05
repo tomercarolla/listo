@@ -1,12 +1,5 @@
 import { create, read } from "@core/crud";
-
-//TODO move to common file
-export type Todo = {
-  id: string;
-  content: string;
-  date: string;
-  done: boolean;
-};
+import { ITodoSchema } from "@ui/schema/todo";
 
 type TodoRepositoryGetParams = {
   page?: number;
@@ -16,7 +9,7 @@ type TodoRepositoryGetParams = {
 function get({ page, limit }: TodoRepositoryGetParams = {}) {
   const currentPage = page || 1;
   const currentLimit = limit || 10;
-  const ALL_TODOS = read();
+  const ALL_TODOS = read().reverse();
 
   const startIndex = (currentPage - 1) * currentLimit;
   const endIndex = currentPage * currentLimit;
@@ -30,7 +23,7 @@ function get({ page, limit }: TodoRepositoryGetParams = {}) {
   };
 }
 
-async function createByContent(content: string): Promise<Todo> {
+async function createByContent(content: string): Promise<ITodoSchema> {
   return create(content);
 }
 
