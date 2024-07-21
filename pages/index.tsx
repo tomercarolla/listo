@@ -5,6 +5,7 @@ import {
   get,
   create,
   toggleDone,
+  deleteById,
 } from "@ui/controller/todo";
 import { ITodoSchema } from "@ui/schema/todo";
 
@@ -135,7 +136,22 @@ export default function HomePage() {
                 <td>{index + 1}</td>
                 <td>{done ? <s>{content}</s> : content}</td>
                 <td align="right">
-                  <button data-type="delete">Delete</button>
+                  <button
+                    data-type="delete"
+                    onClick={() => {
+                      deleteById(id)
+                        .then(() => {
+                          setTodos((currentTodos) => {
+                            return currentTodos.filter(
+                              (todo) => todo.id !== id
+                            );
+                          });
+                        })
+                        .catch(() => console.error("Failed to delete"));
+                    }}
+                  >
+                    Delete
+                  </button>
                 </td>
               </tr>
             ))}

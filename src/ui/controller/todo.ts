@@ -13,7 +13,7 @@ type CreateParams = {
 };
 
 export const get = async ({ page, offset }: GetParams) => {
-  return todoRepository.get({ page: page, limit: 2, offset });
+  return await todoRepository.get({ page: page, limit: 2, offset });
 };
 
 export const create = async ({ content, onSuccess, onError }: CreateParams) => {
@@ -21,7 +21,7 @@ export const create = async ({ content, onSuccess, onError }: CreateParams) => {
     return onError();
   }
 
-  todoRepository
+  await todoRepository
     .createByContent(content)
     .then((newTodo) => onSuccess(newTodo))
     .catch(() => onError());
@@ -36,7 +36,11 @@ export const toggleDone = async ({
   updateTodoOnScreen: () => void;
   onError: () => void;
 }) => {
-  todoRepository.toggleDone(id).then(updateTodoOnScreen).catch(onError);
+  await todoRepository.toggleDone(id).then(updateTodoOnScreen).catch(onError);
+};
+
+export const deleteById = async (id: string) => {
+  await todoRepository.deleteById(id);
 };
 
 export function filterTodosByContent(todos: ITodoSchema[], search: string) {
@@ -46,4 +50,4 @@ export function filterTodosByContent(todos: ITodoSchema[], search: string) {
 
     return contentNormalizes.includes(searchNormalizes);
   });
-};
+}
