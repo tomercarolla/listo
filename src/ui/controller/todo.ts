@@ -27,6 +27,18 @@ export const create = async ({ content, onSuccess, onError }: CreateParams) => {
     .catch(() => onError());
 };
 
+export const toggleDone = async ({
+  id,
+  updateTodoOnScreen,
+  onError,
+}: {
+  id: string;
+  updateTodoOnScreen: () => void;
+  onError: () => void;
+}) => {
+  todoRepository.toggleDone(id).then(updateTodoOnScreen).catch(onError);
+};
+
 export function filterTodosByContent(todos: ITodoSchema[], search: string) {
   return todos.filter((todo) => {
     const searchNormalizes = search.toLowerCase();
@@ -34,4 +46,4 @@ export function filterTodosByContent(todos: ITodoSchema[], search: string) {
 
     return contentNormalizes.includes(searchNormalizes);
   });
-}
+};

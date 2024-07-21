@@ -41,7 +41,7 @@ async function createByContent(content: string): Promise<ITodoSchema> {
   });
 
   if (!response.ok) {
-    throw new Error("Failed to create todo");
+    throw new Error("Server Error");
   }
 
   const ServerResponseSchema = z.object({
@@ -58,7 +58,29 @@ async function createByContent(content: string): Promise<ITodoSchema> {
   return serverResponseParsed.data.todo;
 }
 
+async function toggleDone(id: string): Promise<ITodoSchema> {
+  const res = await fetch(`/api/todos/${id}/toggle-done`, {
+    method: "PUT",
+  });
+
+  if (!res.ok) {
+    throw new Error("Server Error");
+  }
+
+  const ServerResponseSchema = z.object({
+    todo: TodoSchema,
+  });
+  const serverResponseParsed = ServerResponseSchema.safeParse(await res.json());
+
+  if (!serverResponseParsed.success) {
+    throw new Error("Failed to update todo done");
+  }
+
+  return serverResponseParsed.data.todo;
+}
+
 export const todoRepository = {
   get,
   createByContent,
+  toggleDone,
 };

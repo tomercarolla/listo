@@ -54,3 +54,29 @@ export const create = async (req: NextApiRequest, res: NextApiResponse) => {
     todo: createdTodo,
   });
 };
+
+export const toggleDone = async (req: NextApiRequest, res: NextApiResponse) => {
+  const { id } = req.query;
+
+  if (!id || typeof id !== "string") {
+    return res.status(400).json({
+      error: {
+        message: "`id` must be a string",
+      },
+    });
+  }
+
+  try {
+    const updatedTodo = await todoRepository.toggleDone(id);
+
+    res.status(200).json({
+      todo: updatedTodo,
+    });
+  } catch (err) {
+    res.status(404).json({
+      error: {
+        message: err.message,
+      },
+    });
+  }
+};

@@ -1,6 +1,11 @@
 import { GlobalStyles } from "@ui/theme/GlobalStyles";
 import { FormEvent, useEffect, useRef, useState } from "react";
-import { filterTodosByContent, get, create } from "@ui/controller/todo";
+import {
+  filterTodosByContent,
+  get,
+  create,
+  toggleDone,
+} from "@ui/controller/todo";
 import { ITodoSchema } from "@ui/schema/todo";
 
 const bg = "https://mariosouto.com/cursos/crudcomqualidade/bg";
@@ -57,12 +62,12 @@ export default function HomePage() {
         }}
       >
         <div className="typewriter">
-          <h1>O que fazer hoje?</h1>
+          <h1>What to do today?</h1>
         </div>
         <form onSubmit={submit}>
           <input
             type="text"
-            placeholder="Correr, Estudar..."
+            placeholder="Run, Study..."
             value={newTodo}
             onChange={(event) => {
               setNewTodo(event.target.value);
@@ -79,7 +84,7 @@ export default function HomePage() {
         <form>
           <input
             type="text"
-            placeholder="Filtrar lista atual, ex: Dentista"
+            placeholder="Search..."
             onChange={(event) => setSearch(event.target.value)}
           />
         </form>
@@ -91,7 +96,7 @@ export default function HomePage() {
                 <input type="checkbox" disabled />
               </th>
               <th align="left">Id</th>
-              <th align="left">Conteúdo</th>
+              <th align="left">Content</th>
               <th />
             </tr>
           </thead>
@@ -100,12 +105,37 @@ export default function HomePage() {
             {filteredTodos.map(({ id, content, done }, index) => (
               <tr key={id}>
                 <td>
-                  <input type="checkbox" defaultChecked={done} />
+                  <input
+                    type="checkbox"
+                    defaultChecked={done}
+                    onChange={() => {
+                      toggleDone({
+                        id,
+                        onError() {
+                          alert("Failed to to update todo");
+                        },
+                        updateTodoOnScreen() {
+                          setTodos((currentTodos) => {
+                            return currentTodos.map((currentTodo) => {
+                              if (currentTodo.id === id) {
+                                return {
+                                  ...currentTodo,
+                                  done: !currentTodo.done,
+                                };
+                              }
+
+                              return currentTodo;
+                            });
+                          });
+                        },
+                      });
+                    }}
+                  />
                 </td>
                 <td>{index + 1}</td>
-                <td>{content}</td>
+                <td>{done ? <s>{content}</s> : content}</td>
                 <td align="right">
-                  <button data-type="delete">Apagar</button>
+                  <button data-type="delete">Delete</button>
                 </td>
               </tr>
             ))}

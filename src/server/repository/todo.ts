@@ -1,4 +1,4 @@
-import { create, read } from "@core/crud";
+import { create, read, update } from "@core/crud";
 import { ITodoSchema } from "@ui/schema/todo";
 
 type TodoRepositoryGetParams = {
@@ -28,7 +28,21 @@ async function createByContent(content: string): Promise<ITodoSchema> {
   return create(content);
 }
 
+async function toggleDone(id: string): Promise<ITodoSchema> {
+  const ALL_TODOS = read();
+  const todo = ALL_TODOS.find((todo) => todo.id === id);
+
+  if (!todo) {
+    throw new Error(`Todo not found ${id}`);
+  }
+
+  return update(todo.id, {
+    done: !todo.done,
+  });
+}
+
 export const todoRepository = {
   get,
   createByContent,
+  toggleDone,
 };
