@@ -6,6 +6,7 @@ export const get = async (req: NextApiRequest, res: NextApiResponse) => {
   const query = req.query;
   const page = Number(query.page);
   const limit = Number(query.limit);
+  const offset = Number(query.offset);
 
   if (query.page && isNaN(page)) {
     return res.status(400).json({
@@ -26,6 +27,7 @@ export const get = async (req: NextApiRequest, res: NextApiResponse) => {
   const output = todoRepository.get({
     page,
     limit,
+    offset,
   });
 
   return res.status(200).json(output);

@@ -17,10 +17,10 @@ export default function HomePage() {
 
   const hasNoTodos = filteredTodos.length === 0 && !isLoading;
   const hasMorePages = page < totalPage;
-  
+
   useEffect(() => {
     if (!initialLoadComplete.current) {
-      get({ page })
+      get({ page, offset: 0 })
         .then(({ todos, pages }) => {
           setTodos(todos);
           setTotalPages(pages);
@@ -138,7 +138,7 @@ export default function HomePage() {
 
                       setPage(nextPage);
 
-                      get({ page: nextPage })
+                      get({ page: nextPage, offset: todos.length })
                         .then(({ todos, pages }) => {
                           setTodos((prev) => [...prev, ...todos]);
                           setTotalPages(pages);
@@ -146,7 +146,7 @@ export default function HomePage() {
                         .finally(() => setIsLoading(false));
                     }}
                   >
-                    Page {page} - Carregar mais{" "}
+                    Page {page} - Load more{" "}
                     <span
                       style={{
                         display: "inline-block",

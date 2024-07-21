@@ -4,6 +4,7 @@ import { z } from "zod";
 type TodoRepositoryGetParams = {
   page: number;
   limit: number;
+  offset: number;
 };
 
 type TodoRepositoryGetOutput = {
@@ -15,16 +16,19 @@ type TodoRepositoryGetOutput = {
 async function get({
   page,
   limit,
+  offset,
 }: TodoRepositoryGetParams): Promise<TodoRepositoryGetOutput> {
-  return fetch(`/api/todos?page=${page}&limit=${limit}`).then(async (res) => {
-    const data = await res.json();
+  return fetch(`/api/todos?page=${page}&limit=${limit}&offset=${offset}`).then(
+    async (res) => {
+      const data = await res.json();
 
-    return {
-      todos: data.todos,
-      total: data.total,
-      pages: data.pages,
-    };
-  });
+      return {
+        todos: data.todos,
+        total: data.total,
+        pages: data.pages,
+      };
+    }
+  );
 }
 
 async function createByContent(content: string): Promise<ITodoSchema> {

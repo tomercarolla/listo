@@ -3,6 +3,7 @@ import { ITodoSchema } from "@ui/schema/todo";
 
 type GetParams = {
   page: number;
+  offset: number;
 };
 
 type CreateParams = {
@@ -11,8 +12,8 @@ type CreateParams = {
   onSuccess: (todo: ITodoSchema) => void;
 };
 
-export const get = async ({ page }: GetParams) => {
-  return todoRepository.get({ page: page, limit: 2 });
+export const get = async ({ page, offset }: GetParams) => {
+  return todoRepository.get({ page: page, limit: 2, offset });
 };
 
 export const create = async ({ content, onSuccess, onError }: CreateParams) => {

@@ -4,16 +4,17 @@ import { ITodoSchema } from "@ui/schema/todo";
 type TodoRepositoryGetParams = {
   page?: number;
   limit?: number;
+  offset?: number;
 };
 
-function get({ page, limit }: TodoRepositoryGetParams = {}) {
+function get({ page, limit, offset }: TodoRepositoryGetParams = {}) {
   const currentPage = page || 1;
   const currentLimit = limit || 10;
+  const currentOffset = offset || (currentPage - 1) * currentLimit;
   const ALL_TODOS = read().reverse();
 
-  const startIndex = (currentPage - 1) * currentLimit;
-  const endIndex = currentPage * currentLimit;
-  const paginatedTodos = ALL_TODOS.slice(startIndex, endIndex);
+  const endIndex = currentOffset + currentLimit;
+  const paginatedTodos = ALL_TODOS.slice(currentOffset, endIndex);
   const totalPages = Math.ceil(ALL_TODOS.length / currentLimit);
 
   return {
