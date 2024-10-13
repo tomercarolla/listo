@@ -21,17 +21,7 @@ export function create(content: string): Todo {
 
   const todos: Array<Todo> = [...read(), todo];
 
-  fs.writeFileSync(
-    DB_FILE_PATH,
-    JSON.stringify(
-      {
-        todos,
-        dogs: [],
-      },
-      null,
-      2
-    )
-  );
+  fs.writeFileSync(DB_FILE_PATH, JSON.stringify({ todos }, null, 2));
   return todo;
 }
 
