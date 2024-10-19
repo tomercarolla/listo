@@ -1,5 +1,6 @@
 import fs from "fs";
 import { v4 as uuid } from "uuid";
+
 const DB_FILE_PATH = "./core/db";
 
 type UUID = string;
@@ -79,6 +80,7 @@ export function deleteById(id: UUID) {
     if (id === todo.id) {
       return false;
     }
+
     return true;
   });
 
