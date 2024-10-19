@@ -65,9 +65,11 @@ export default function HomePage() {
         <div className="typewriter">
           <h1>What to do today?</h1>
         </div>
+
         <form onSubmit={submit}>
           <input
             type="text"
+            name="add-todo"
             placeholder="Run, Study..."
             value={newTodo}
             onChange={(event) => {
@@ -75,7 +77,7 @@ export default function HomePage() {
             }}
           />
 
-          <button type="submit" aria-label="Adicionar novo item">
+          <button type="submit" aria-label="Add new Item">
             +
           </button>
         </form>
