@@ -1,0 +1,6 @@
+.env
+.github
+.idea
+.vscode
+cypress
+core
