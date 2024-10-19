@@ -15,7 +15,7 @@ jobs:
         run: "npm run lint"
   test:
     runs-on: ubuntu-latest
-    container: cypress/browsers:node18.17.0-chrome107
+    container: cypress/browsers:node-20.14.0-chrome-126.0.6478.114-1-ff-127.0.1-edge-126.0.2592.61-1
     steps:
       - uses: actions/checkout@v3
       - name: "Install Dependencies"
