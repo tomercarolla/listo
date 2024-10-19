@@ -75,7 +75,7 @@ export default [
           ignore: ["jsx", "global"],
         },
       ],
-
+      "@typescript-eslint/no-unused-vars": "warn",
       "react/react-in-jsx-scope": "off",
       "react/jsx-uses-react": "off",
     },
