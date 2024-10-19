@@ -25,7 +25,7 @@ export const get = async (req: NextApiRequest, res: NextApiResponse) => {
     });
   }
 
-  const output = todoRepository.get({
+  const output = await todoRepository.get({
     page,
     limit,
     offset,
@@ -49,11 +49,19 @@ export const create = async (req: NextApiRequest, res: NextApiResponse) => {
     });
   }
 
-  const createdTodo = await todoRepository.createByContent(body.data.content);
+  try {
+    const createdTodo = await todoRepository.createByContent(body.data.content);
 
-  res.status(201).json({
-    todo: createdTodo,
-  });
+    res.status(201).json({
+      todo: createdTodo,
+    });
+  } catch {
+    res.status(400).json({
+      error: {
+        message: "Failed to create todo",
+      },
+    });
+  }
 };
 
 export const toggleDone = async (req: NextApiRequest, res: NextApiResponse) => {
