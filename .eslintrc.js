@@ -32,7 +32,7 @@ module.exports = {
       version: "detect",
     },
   },
-  ignorePatterns: ["node_modules/", "_explicacoes/"],
+  ignorePatterns: ["node_modules/"],
   rules: {
     "no-console": ["error", { allow: ["warn", "error"] }],
     "react/no-unknown-property": ["error", { ignore: ["jsx", "global"] }],
