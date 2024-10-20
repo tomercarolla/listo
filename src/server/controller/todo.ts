@@ -3,26 +3,41 @@ import { todoRepository } from "@server/repository/todo";
 import { z } from "zod";
 import { HttpNotFoundError } from "@server/infra/errors";
 
-export const get = async (req: NextApiRequest, res: NextApiResponse) => {
-  const query = req.query;
+export const get = async (req: Request) => {
+  const { searchParams } = new URL(req.url);
+  const query = {
+    page: searchParams.get("page"),
+    limit: searchParams.get("limit"),
+    offset: searchParams.get("offset"),
+  };
   const page = Number(query.page);
   const limit = Number(query.limit);
   const offset = Number(query.offset);
 
   if (query.page && isNaN(page)) {
-    return res.status(400).json({
-      error: {
-        message: "`page` must be a number",
-      },
-    });
+    return new Response(
+      JSON.stringify({
+        error: {
+          message: "`limit` must be a number",
+        },
+      }),
+      {
+        status: 400,
+      }
+    );
   }
 
   if (query.limit && isNaN(limit)) {
-    return res.status(400).json({
-      error: {
-        message: "`limit` must be a number",
-      },
-    });
+    return new Response(
+      JSON.stringify({
+        error: {
+          message: "`limit` must be a number",
+        },
+      }),
+      {
+        status: 400,
+      }
+    );
   }
 
   const output = await todoRepository.get({
@@ -31,36 +46,54 @@ export const get = async (req: NextApiRequest, res: NextApiResponse) => {
     offset,
   });
 
-  return res.status(200).json(output);
+  return new Response(JSON.stringify(output), {
+    status: 200,
+  });
 };
 
 const TodoCreateBodySchema = z.object({
   content: z.string().min(3),
 });
 
-export const create = async (req: NextApiRequest, res: NextApiResponse) => {
-  const body = TodoCreateBodySchema.safeParse(req.body);
+export const create = async (req: Request) => {
+  const body = TodoCreateBodySchema.safeParse(await req.json());
 
   if (!body.success) {
-    return res.status(400).json({
-      error: {
-        message: "You need to provide a content with min 3 characters",
-      },
-    });
+    return new Response(
+      JSON.stringify({
+        error: {
+          message: "You need to provide a content with min 3 characters",
+          description: body.error.issues,
+        },
+      }),
+      {
+        status: 400,
+      }
+    );
   }
 
   try {
     const createdTodo = await todoRepository.createByContent(body.data.content);
 
-    res.status(201).json({
-      todo: createdTodo,
-    });
+    return new Response(
+      JSON.stringify({
+        todo: createdTodo,
+      }),
+      {
+        status: 201,
+      }
+    );
   } catch {
-    res.status(400).json({
-      error: {
-        message: "Failed to create todo",
-      },
-    });
+    return new Response(
+      JSON.stringify({
+        error: {
+          message: "Failed to create todo",
+        },
+      }),
+      {
+        status: 400,
+      }
+    );
   }
 };
 

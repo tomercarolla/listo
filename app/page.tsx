@@ -1,3 +1,5 @@
+"use client";
+
 import { GlobalStyles } from "@ui/theme/GlobalStyles";
 import { FormEvent, useEffect, useRef, useState } from "react";
 import {
