@@ -40,15 +40,28 @@ export const get = async (req: Request) => {
     );
   }
 
-  const output = await todoRepository.get({
-    page,
-    limit,
-    offset,
-  });
+  try {
+    const output = await todoRepository.get({
+      page,
+      limit,
+      offset,
+    });
 
-  return new Response(JSON.stringify(output), {
-    status: 200,
-  });
+    return new Response(JSON.stringify(output), {
+      status: 200,
+    });
+  } catch {
+    return new Response(
+      JSON.stringify({
+        error: {
+          message: "Failed to get todos",
+        },
+      }),
+      {
+        status: 400,
+      }
+    );
+  }
 };
 
 const TodoCreateBodySchema = z.object({
