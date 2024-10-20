@@ -18,15 +18,22 @@
     "jsx": "preserve",
     "baseUrl": ".",
     "paths": {
-      "@ui/*": ["src/ui/*"],
-      "@core/*": ["core/*"],
-      "@server/*": ["src/server/*"],
+      "@ui/*": [
+        "src/ui/*"
+      ],
+      "@core/*": [
+        "core/*"
+      ],
+      "@server/*": [
+        "src/server/*"
+      ]
     },
     "plugins": [
       {
         "name": "next"
       }
-    ]
+    ],
+    "strictNullChecks": true
   },
   "include": [
     "next-env.d.ts",
